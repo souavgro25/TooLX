@@ -78,9 +78,9 @@ WSGI_APPLICATION = 'ToolX.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'toolx',
+        'NAME': 'Toolx',
         'USER': 'postgres',
-        'PASSWORD': '2296',
+        'PASSWORD': 'Niyaz123',
         'HOST': 'localhost',
 
     }
