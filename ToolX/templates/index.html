@@ -1,25 +1,67 @@
 {% extends 'base.html'%}
 
 {% block maincontent %}
-
-<div class="ml-20 mt-10">
-    <p class="text-xl text-gray-900 mb-5">
-        DNS Lookup
-    </p>
-    <form class="flex gap-x-5" >
-        
-        <input class="border-2 rounded-lg border-gray-400 px-3" placeholder="Domains/IP" type="text">
-        <button class=" px-5 py-0.5 bg-green-500 rounded-lg flex items-center gap-x-2 ">DNS
-            <i style="margin-top: -2px;" class="fas fa-caret-down"></i>
-        </button>
-    </form>
-    <div>
-        <p>Filters</p>
-        <p>hello lookup</p>
-        <p>hello lookup</p>
-        <p>hello lookup</p>
-        <p>hello lookup</p>
+<div class="flex">
+    <div class="ml-20 mt-10 flex-1">
+        <p class="text-xl text-gray-900 mb-5">
+            DNS Lookup
+        </p>
+        <form id="form1" class="flex gap-x-5 ">
+             {% csrf_token %}
+            <input id="host" class="border-2 rounded-lg border-gray-400 px-3" placeholder="Domains/IP" type="text">
+            
+            <button onclick="showtypes(event)" class=" px-5 py-0.5 bg-green-500 rounded-lg flex items-center gap-x-2 ">DNS
+                <i style="margin-top: -2px;" class="fas fa-caret-down"></i>
+            </button>
+        </form>
+        <div id="types" class=" hidden mt-10">
+            <p class="mb-3">Types</p>
+            <p onclick="lookup('AAA')">AAA Records</p>
+            <p onclick="lookup('A')">A Records</p>
+            <p onclick="lookup('NS')">NS Records</p>
+            <p onclick="lookup('MX')">MX Records</p>
+        </div>
     </div>
+    <div id="info" class=" mt-10 flex-1">
+       
+    </div>
+
 </div>
 
+{% block script %}
+<script>
+function showtypes(e){
+    e.preventDefault()
+    form1.prevent
+    document.getElementById("types").classList.remove("hidden");
+}
+function lookup(type){
+    var host = document.getElementById("host").value
+    
+   
+    url = "{% url 'dnslookup' 'host' 'AAA' %}"
+    urlnew=url.replace("host",host).replace("AAA",type)
+    console.log(urlnew)
+    let html="";
+    fetch(urlnew)
+        .then((res)=> res.json())
+        .then((res)=>{
+            console.log(res.data.records);
+            res.data.records.map(i => {
+                console.log(i)
+            html += `<p>${type} Records : ${i}</p>`  
+            
+            })
+        })
+        
+        document.getElementById("info").innerHTML= out;
+        console.log(html)
+        
+}
+function show(data,id){
+    document.getElementById(id).innerHTML=data;
+}
+</script>
+
+{% endblock %}
 {% endblock %}
