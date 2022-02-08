@@ -1,4 +1,4 @@
 django==4.0.2
 pillow==9.0.1 
-psycopg2==2.9.3
+psycopg2-binary
 dnspython==2.2.0
