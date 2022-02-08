@@ -16,7 +16,7 @@
         </form>
         <div id="types" class=" hidden mt-10">
             <p class="mb-3">Types</p>
-            <p onclick="lookup('AAA')">AAA Records</p>
+            <p onclick="lookup('AAAA')">AAAA Records</p>
             <p onclick="lookup('A')">A Records</p>
             <p onclick="lookup('NS')">NS Records</p>
             <p onclick="lookup('MX')">MX Records</p>
@@ -47,14 +47,19 @@ function lookup(type){
         .then((res)=> res.json())
         .then((res)=>{
             console.log(res.data.records);
+            data = `<p class="mb-5 text-xl text-gray-900"> Results : </p> <p class="mt-2 ">Host : ${res.data.host}</p>
+                    <p class="mt-2"> Type : ${res.data.type} </p> `
             res.data.records.map(i => {
-                console.log(i)
-            html += `<p>${type} Records : ${i}</p>`  
+            console.log(i)
+            html += ` <p class="mt-2">${type} Records : ${i}</p> `  
             
             })
+            data = data + html
+            show(data,'info')
         })
+       
         
-        document.getElementById("info").innerHTML= out;
+        
         console.log(html)
         
 }

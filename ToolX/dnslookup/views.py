@@ -11,7 +11,7 @@ def nslookup(request,host,type):
     for val in result:
         print('A Record : ', val.to_text())
         records.append(val.to_text())
-    context={ 'records': records}
+    context={ 'records': records ,'host':host,'type':type}
     return JsonResponse({"data":context})
     
 
