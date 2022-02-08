@@ -1,4 +1,4 @@
-settings.py
+
 settings/local.py
 thcwebsite/settings/local.py
 db.sqlite3

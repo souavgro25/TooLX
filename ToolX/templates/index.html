@@ -1,28 +1,28 @@
 {% extends 'base.html'%}
 
 {% block maincontent %}
-<div class="flex">
-    <div class="ml-20 mt-10 flex-1">
+<div class="flex flex-col md:flex-row">
+    <div class="md:ml-20 ml-5 mt-10 flex-1">
         <p class="text-xl text-gray-900 mb-5">
             DNS-Lookup
         </p>
         <form id="form1" class="flex gap-x-5 ">
              {% csrf_token %}
-            <input id="host" class="border-2 rounded-lg border-gray-400 px-3" placeholder="Domains/IP" type="text">
+            <input id="host" class="border-2 rounded-lg border-gray-400 px-2 md:px-3 w-56 md:w-full" placeholder="Domains/IP" type="text">
             
-            <button onclick="showtypes(event)" class=" px-5 py-0.5 bg-green-500 rounded-lg flex items-center gap-x-2 ">DNS
+            <button onclick="showtypes(event)" class=" px-5 py-0.5 bg-green-500 rounded-lg flex items-center gap-x-1 md:gap-x-2 ">DNS
                 <i style="margin-top: -2px;" class="fas fa-caret-down"></i>
             </button>
         </form>
-        <div id="types" class=" hidden mt-10">
+        <div id="types" class=" hidden mt-10 ">
             <p class="mb-3">Types</p>
-            <p onclick="lookup('AAAA')">AAAA Records</p>
-            <p onclick="lookup('A')">A Records</p>
-            <p onclick="lookup('NS')">NS Records</p>
-            <p onclick="lookup('MX')">MX Records</p>
+            <p class="text-gray-800" onclick="lookup('AAAA')">AAAA Records</p>
+            <p class="text-gray-800" onclick="lookup('A')">A Records</p>
+            <p class="text-gray-800" onclick="lookup('NS')">NS Records</p>
+            <p class="text-gray-800" onclick="lookup('MX')">MX Records</p>
         </div>
     </div>
-    <div id="info" class=" mt-10 flex-1">
+    <div id="info" class="mt-10 md:mt-5 flex-1 ml-5 md:ml-20">
        
     </div>
 
