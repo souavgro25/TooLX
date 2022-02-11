@@ -6,14 +6,16 @@ installation(this installation is  for ubuntu/linux)
 steps to setup repositry 
 
 1. install vs code in ubuntu 
-command 
+
+
 1 > sudo snap install --classic code
 
 2. install mysql 
-commands 
+
 1 > sudo apt install mysql-server mysql-client
 
 2 > apt-get install libmysqlclient-dev
+
 3. creating enviroment 
 
 1 > pip/pip3 install virtualenv 
@@ -35,7 +37,8 @@ this will look like this now
 (project) sourabh@sourabh-Lenovo-ideapad-330-15IKB:~/Desktop/project$ 
 
 4. now  install git in ubuntu 
-sudo apt install git 
+
+1 > sudo apt install git 
 
 then clone the repositry 
 
