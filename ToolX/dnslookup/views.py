@@ -28,15 +28,15 @@ def about(request):
 
 def portscanner(request,host, port,type):
     nmScan = nmap.PortScanner()
-    # try:
-    if (type==1):
-        scan = nmScan.scan(host,arguments='-sV  -p'+port)
-    elif(type==2):
-        scan = nmScan.scan(host,arguments='-sC -p'+port)
-    elif(type==3):
-        scan = nmScan.scan(host,arguments='--privileged -sU -p'+port)
-    elif(type==4):
-        scan = nmScan.scan(host,arguments=' --privileged -sN -p'+port)
-    return JsonResponse({'data':scan,"error":"0"})
-    # except:
-    #     return JsonResponse({'data':"failed to scan this host ","error":"1"})
+    try:
+        if (type==1):
+            scan = nmScan.scan(host,arguments='-sV  -p'+port)
+        elif(type==2):
+            scan = nmScan.scan(host,arguments='-sC -p'+port)
+        elif(type==3):
+            scan = nmScan.scan(host,arguments='--privileged -sU -p'+port)
+        elif(type==4):
+            scan = nmScan.scan(host,arguments=' --privileged -sN -p'+port)
+        return JsonResponse({'data':scan,"error":"0"})
+    except:
+        return JsonResponse({'data':"failed to scan this host ","error":"1"})
