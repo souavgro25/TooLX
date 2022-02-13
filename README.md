@@ -13,8 +13,8 @@ steps to setup repositry
 2. install mysql
 
 1 > sudo apt install mysql-server mysql-client
+2 > sudo apt-get install python3-dev default-libmysqlclient-dev build-essential
 
-2 > apt-get install libmysqlclient-dev
 
 3. creating enviroment
 

@@ -23,8 +23,7 @@ def nslookup(request,host,type):
 def index(request):
     return render(request,'index.html')
    
-def about(request):
-    return render(request, 'about.html')
+
 
 def portscanner(request,host, port,type):
     nmScan = nmap.PortScanner()
@@ -40,3 +39,10 @@ def portscanner(request,host, port,type):
         return JsonResponse({'data':scan,"error":"0"})
     except:
         return JsonResponse({'data':"failed to scan this host ","error":"1"})
+
+def about(request):
+    context={ 'records': "hello i am about page " }
+    return render(request,'about.html',context)
+
+def sourabh(request):
+    return render(request,'about.html')
