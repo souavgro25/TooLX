@@ -6,6 +6,7 @@ import json
 import nmap 
 
 
+
 def nslookup(request,host,type):
     try:
         result = dns.resolver.query(host,type)
@@ -44,5 +45,3 @@ def about(request):
     context={ 'records': "hello i am about page " }
     return render(request,'about.html',context)
 
-def sourabh(request):
-    return render(request,'about.html')
