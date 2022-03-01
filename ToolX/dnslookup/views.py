@@ -4,8 +4,16 @@ from django.http import HttpResponse, JsonResponse
 import dns.resolver
 import json
 import nmap 
+import subprocess
 
-
+def ping(request,):
+    if request.method == 'POST':
+        ip = request.POST.get('ip')
+        p= subprocess.run(['ping', '-c4', ip], capture_output=True, text=True)
+        p1= p.stdout
+        return render(request, 'home.html',{'p1':p1})
+    else:
+        return render(request, 'home.html')
 
 def nslookup(request,host,type):
     try:
@@ -44,4 +52,7 @@ def portscanner(request,host, port,type):
 def about(request):
     context={ 'records': "hello i am about page " }
     return render(request,'about.html',context)
+
+def nmap(request):
+    return render(request,'nmap.html')
 
