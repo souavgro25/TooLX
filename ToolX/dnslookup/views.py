@@ -1,6 +1,8 @@
 
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
+from matplotlib.style import context
+from .models import Tools
 import dns.resolver
 import json
 import nmap 
@@ -22,7 +24,12 @@ def nslookup(request,host,type):
     
 
 def index(request):
-    return render(request,'index.html')
+    tool= Tools.objects.filter(Toolname='Dns')
+    print(tool)
+    context ={
+        'Tool':tool
+    }
+    return render(request,'index.html',context)
    
 
 
