@@ -16,9 +16,16 @@
         </form>
         <div id="types" class=" hidden mt-10 ">
             <p class="mb-3">Types</p>
+<<<<<<< HEAD
             {% for tool in Tool %}
             <p class="text-gray-800" onclick="lookup('{{tool.command}}')">{{tool.Name}}</p>
             {% endfor %}
+=======
+            <p class="text-gray-800" onclick="lookup('AAAA')">AAAA Records</p>
+            <p class="text-gray-800" onclick="lookup('A')">A Records</p>
+            <p class="text-gray-800" onclick="lookup('NS')">NS Records</p>
+            <p class="text-gray-800" onclick="lookup('MX')">MX Records</p>
+>>>>>>> 2237881c36c28573ffaba2df034934366be98b45
         </div>
     </div>
     <div id="info" class="mt-10 md:mt-5 flex-1 ml-5 md:ml-20">
@@ -37,18 +44,33 @@ function showtypes(e){
 function lookup(type){
     var host = document.getElementById("host").value
     
+<<<<<<< HEAD
     
     url = "{% url 'dnslookup' 'host' 'AAA' %}"
     urlnew=url.replace("host",host).replace("AAA",type)
+=======
+   
+    url = "{% url 'dnslookup' 'host' 'AAA' %}"
+    urlnew=url.replace("host",host).replace("AAA",type)
+    console.log(urlnew)
+>>>>>>> 2237881c36c28573ffaba2df034934366be98b45
     let html="";
     fetch(urlnew)
         .then((res)=> res.json())
         .then((res)=>{
+<<<<<<< HEAD
             
             data = `<p class="mb-5 text-xl text-gray-900"> Results : </p> <p class="mt-2 ">Host : ${res.data.host}</p>
                     <p class="mt-2"> Type : ${res.data.type} </p> `
             res.data.records.map(i => {
             
+=======
+            console.log(res.data.records);
+            data = `<p class="mb-5 text-xl text-gray-900"> Results : </p> <p class="mt-2 ">Host : ${res.data.host}</p>
+                    <p class="mt-2"> Type : ${res.data.type} </p> `
+            res.data.records.map(i => {
+            console.log(i)
+>>>>>>> 2237881c36c28573ffaba2df034934366be98b45
             html += ` <p class="mt-2">${type} Records : ${i}</p> `  
             
             })
@@ -58,7 +80,11 @@ function lookup(type){
        
         
         
+<<<<<<< HEAD
         
+=======
+        console.log(html)
+>>>>>>> 2237881c36c28573ffaba2df034934366be98b45
         
 }
 function show(data,id){
