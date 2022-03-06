@@ -11,5 +11,6 @@ urlpatterns = [
     path('about',views.about,name='about'),
     path('index_nmap',views.indexnmap,name="nmap"),
     path('ping',views.ping, name='ping'),
+    path('traceroute', views.traceroute, name='traceroute'),
 
 ]
