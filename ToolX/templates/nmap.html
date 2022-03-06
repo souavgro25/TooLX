@@ -4,28 +4,21 @@
 <div class="flex flex-col md:flex-row">
     <div class="md:ml-20 ml-5 mt-10 flex-1">
         <p class="text-xl text-gray-900 mb-5">
-            DNS-Lookup
+            Nmap Port Scan 
         </p>
         <form id="form1" class="flex gap-x-5 ">
              {% csrf_token %}
             <input id="host" class="border-2 rounded-lg border-gray-400 px-2 md:px-3 w-56 md:w-80" placeholder="Domains/IP" type="text">
-            
-            <button onclick="showtypes(event)" class=" px-5 py-0.5 bg-green-500 rounded-lg flex items-center gap-x-1 md:gap-x-2 ">DNS
+            <input id="port" class="border-2 rounded-lg border-gray-400 px-2 md:px-3 w-56 md:w-80" placeholder="Port (80,443)" type="text">
+            <button onclick="showtypes(event)" class=" px-5 py-0.5 bg-green-500 rounded-lg flex items-center gap-x-1 md:gap-x-2 ">Nmap
                 <i style="margin-top: -2px;" class="fas fa-caret-down"></i>
             </button>
         </form>
         <div id="types" class=" hidden mt-10 ">
             <p class="mb-3">Types</p>
-<<<<<<< HEAD
             {% for tool in Tool %}
-            <p class="text-gray-800" onclick="lookup('{{tool.command}}')">{{tool.Name}}</p>
+            <p class="text-gray-800" onclick="lookup('{{tool.id}}')">{{tool.Name}}</p>
             {% endfor %}
-=======
-            <p class="text-gray-800" onclick="lookup('AAAA')">AAAA Records</p>
-            <p class="text-gray-800" onclick="lookup('A')">A Records</p>
-            <p class="text-gray-800" onclick="lookup('NS')">NS Records</p>
-            <p class="text-gray-800" onclick="lookup('MX')">MX Records</p>
->>>>>>> 2237881c36c28573ffaba2df034934366be98b45
         </div>
     </div>
     <div id="info" class="mt-10 md:mt-5 flex-1 ml-5 md:ml-20">
@@ -43,48 +36,31 @@ function showtypes(e){
 }
 function lookup(type){
     var host = document.getElementById("host").value
+    var port = document.getElementById("port").value
     
-<<<<<<< HEAD
     
-    url = "{% url 'dnslookup' 'host' 'AAA' %}"
-    urlnew=url.replace("host",host).replace("AAA",type)
-=======
-   
-    url = "{% url 'dnslookup' 'host' 'AAA' %}"
-    urlnew=url.replace("host",host).replace("AAA",type)
-    console.log(urlnew)
->>>>>>> 2237881c36c28573ffaba2df034934366be98b45
+    url = "{% url 'portscanner' 'host' '80' '123' %}"
+    urlnew=url.replace("host",host).replace("123",type).replace("80",port)
     let html="";
     fetch(urlnew)
         .then((res)=> res.json())
         .then((res)=>{
-<<<<<<< HEAD
+            conole.log(res)
             
-            data = `<p class="mb-5 text-xl text-gray-900"> Results : </p> <p class="mt-2 ">Host : ${res.data.host}</p>
+            {% comment %} data = `<p class="mb-5 text-xl text-gray-900"> Results : </p> <p class="mt-2 ">Host : ${res.data.host}</p>
                     <p class="mt-2"> Type : ${res.data.type} </p> `
             res.data.records.map(i => {
             
-=======
-            console.log(res.data.records);
-            data = `<p class="mb-5 text-xl text-gray-900"> Results : </p> <p class="mt-2 ">Host : ${res.data.host}</p>
-                    <p class="mt-2"> Type : ${res.data.type} </p> `
-            res.data.records.map(i => {
-            console.log(i)
->>>>>>> 2237881c36c28573ffaba2df034934366be98b45
             html += ` <p class="mt-2">${type} Records : ${i}</p> `  
             
             })
             data = data + html
-            show(data,'info')
+            show(data,'info') {% endcomment %}
         })
        
         
         
-<<<<<<< HEAD
         
-=======
-        console.log(html)
->>>>>>> 2237881c36c28573ffaba2df034934366be98b45
         
 }
 function show(data,id){

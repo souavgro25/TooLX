@@ -1,12 +1,10 @@
 
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
-from matplotlib.style import context
 from .models import Tools
 import dns.resolver
-import json
-import nmap 
 import subprocess
+import nmap
 
 def ping(request,):
     if request.method == 'POST':
@@ -41,17 +39,19 @@ def index(request):
    
 
 
-def portscanner(request,host, port,type):
+def nmapscanner(request,host, port,id):
+    tool= Tools.objects.filter(id=id)
     nmScan = nmap.PortScanner()
     try:
-        if (type==1):
-            scan = nmScan.scan(host,arguments='-sV  -p'+port)
-        elif(type==2):
-            scan = nmScan.scan(host,arguments='-sC -p'+port)
-        elif(type==3):
-            scan = nmScan.scan(host,arguments='--privileged -sU -p'+port)
-        elif(type==4):
-            scan = nmScan.scan(host,arguments=' --privileged -sN -p'+port)
+        scan = nmScan.scan(host,arguments=tool.command+port)
+        # if (type==1):
+        #     scan = nmScan.scan(host,arguments='-sV  -p'+port)
+        # elif(type==2):
+        #     scan = nmScan.scan(host,arguments='-sC -p'+port)
+        # elif(type==3):
+        #     scan = nmScan.scan(host,arguments='--privileged -sU -p'+port)
+        # elif(type==4):
+        #     scan = nmScan.scan(host,arguments=' --privileged -sN -p'+port)
         return JsonResponse({'data':scan,"error":"0"})
     except:
         return JsonResponse({'data':"failed to scan this host ","error":"1"})
@@ -60,6 +60,10 @@ def about(request):
     context={ 'records': "hello i am about page " }
     return render(request,'about.html',context)
 
-def nmap(request):
-    return render(request,'nmap.html')
+def indexnmap(request):
+    tool= Tools.objects.filter(Toolname='Nmap')
+    context ={
+        'Tool':tool
+    }
+    return render(request,'nmap.html',context)
 

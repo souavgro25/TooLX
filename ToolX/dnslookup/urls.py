@@ -6,10 +6,10 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('ab/<str:host>/<str:type>', views.nslookup, name='dnslookup'),
    
-    path('nmap/<str:host>/<str:port>/<int:type>',views.portscanner,name='portscanner'),
+    path('nmap/<str:host>/<str:port>/<str:id>',views.nmapscanner,name='portscanner'),
 
     path('about',views.about,name='about'),
-    path('index_nmap',views.nmap,name="nmap"),
-     path('ping',views.ping, name='ping'),
+    path('index_nmap',views.indexnmap,name="nmap"),
+    path('ping',views.ping, name='ping'),
 
 ]
