@@ -12,5 +12,9 @@ class Tools(models.Model):
     )
     Toolname = models.CharField( max_length=50 ,choices=Tool_choices)
     command= models.CharField(max_length=100)
-        
 
+
+# ping model
+class Ping(models.Model):
+    definition= models.CharField(max_length=50, null= False)
+    query= models.CharField(max_length= 35)
