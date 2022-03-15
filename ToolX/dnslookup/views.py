@@ -1,12 +1,15 @@
 
-from queue import Empty
-from sys import stderr
+from concurrent.futures import process
+from os import read
+import readline
+from subprocess import PIPE
+import shlex
 from django.shortcuts import render
-from django.http import HttpResponse, JsonResponse
-from .models import Tools
 import dns.resolver
 import subprocess
 import nmap
+
+from dnslookup.models import Ping, Tools
 
 def nslookup(request,host,type):
     try:
@@ -65,7 +68,7 @@ def indexnmap(request):
 
 #Ping
 #function made for ping
-def ping (request):
+def ping(request):
     if request.method == 'POST':
         ip = request.POST.get('ip')
         p= subprocess.run(['ping', '-c4', ip], capture_output=True, text=True)
@@ -93,8 +96,12 @@ def traceroute (request):
         elif p.stdout:
             p1= p.stdout
         else:
-            subprocess.run(['sudo apt install traceroute'], shell=True)
-            p1= 're run your Command please dependency is Setup now'
+            p1='provide the valid input'
         return render(request, 'home.html', {'p1': p1})
     else:
         return render(request, 'home.html')
+
+
+#Hping3
+#function made for hping3
+
