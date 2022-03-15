@@ -56,17 +56,15 @@ commands
 
 2 > CREATE USER 'newuser'@'localhost' IDENTIFIED BY 'password';
 
-3 > GRANT ALL PRIVILEGES ON _ . _ TO 'newuser'@'localhost';
+3 > create database dbname
+
+4 > GRANT ALL PRIVILEGES ON database_name.* TO 'username'@'localhost';
 
 in newuser , password give your username and password to create a user with all previleges
 
-6. create a database by logging into the mysql
 
-1 > mysql -u username -p password
 
-2 > create database dbname
-
-7. go into the repository and search for setting files and change database info
+6. go into the repository and search for setting files and change database info
 
 DATABASES = {
 
@@ -87,11 +85,11 @@ DATABASES = {
 }
 save the file
 
-8. run migrations to create the tables in db
+7. run migrations to create the tables in db
 
 1 > python manage.py migrate
 
-9. run local to server to access to website
+8. run local to server to access to website
 
 1 > python manage.py runserver
 
@@ -101,3 +99,8 @@ save the file
 2 > python manage.py runserver 9000
 
     9000 here is specified port on which i want to start the service
+
+9. 
+1 > sudo apt-get install libcap2-bin 
+2 > sudo setcap cap_net_raw,cap_net_admin,cap_net_bind_service+eip $(which nmap)
+3 > getcap $(which nmap)

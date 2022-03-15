@@ -8,16 +8,19 @@
         </p>
         <form id="form1" class="flex gap-x-5 ">
              {% csrf_token %}
-            <input id="host" class="border-2 rounded-lg border-gray-400 px-2 md:px-3 w-56 md:w-80" placeholder="Domains/IP" type="text">
-            <input id="port" class="border-2 rounded-lg border-gray-400 px-2 md:px-3 w-56 md:w-80" placeholder="Port (80,443)" type="text">
-            <button onclick="showtypes(event)" class=" px-5 py-0.5 bg-green-500 rounded-lg flex items-center gap-x-1 md:gap-x-2 ">Nmap
+            
+                <input id="host" class="border-2 rounded-lg border-gray-400 px-2 md:px-3 w-56 md:w-60" placeholder="Domains/IP" type="text">
+                <input id="port" class="border-2 rounded-lg border-gray-400 px-2 md:px-3 w-56 md:w-28" placeholder="Port (80)" type="text">
+             
+            
+            <button onclick="showtypes(event)" class="  px-5 py-0.5 bg-green-500 rounded-lg flex items-center gap-x-1 md:gap-x-2 ">Nmap
                 <i style="margin-top: -2px;" class="fas fa-caret-down"></i>
             </button>
         </form>
         <div id="types" class=" hidden mt-10 ">
             <p class="mb-3">Types</p>
             {% for tool in Tool %}
-            <p class="text-gray-800" onclick="lookup('{{tool.id}}')">{{tool.Name}}</p>
+            <p class="text-gray-800" onclick="lookup('{{tool.command}}')">{{tool.Name}}</p>
             {% endfor %}
         </div>
     </div>
@@ -42,20 +45,22 @@ function lookup(type){
     url = "{% url 'portscanner' 'host' '80' '123' %}"
     urlnew=url.replace("host",host).replace("123",type).replace("80",port)
     let html="";
+    let html1="";
     fetch(urlnew)
         .then((res)=> res.json())
         .then((res)=>{
-            conole.log(res)
+            console.log(res)
+            host = res.data.host
+            console.log(host)
+            data = `<p class="mb-5 text-xl text-gray-900"> Results : </p> <p class="mt-2 ">Command : ${res.data.scaninfo.nmap.command_line}</p>
+                    <p class="mt-2"> Type : ${res.data.scaninfo.scan[host].status.state} </p> `
+            for (const property in res.data.scaninfo.scan[host].tcp) {        
+            html += ` <p class="mt-2">${property} ${res.data.scaninfo.scan[host].tcp[property].state}  service : ${res.data.scaninfo.scan[host].tcp[property].name} ${res.data.scaninfo.scan[host].tcp[property].product} ${res.data.scaninfo.scan[host].tcp[property].version}</p> `  
             
-            {% comment %} data = `<p class="mb-5 text-xl text-gray-900"> Results : </p> <p class="mt-2 ">Host : ${res.data.host}</p>
-                    <p class="mt-2"> Type : ${res.data.type} </p> `
-            res.data.records.map(i => {
-            
-            html += ` <p class="mt-2">${type} Records : ${i}</p> `  
-            
-            })
-            data = data + html
-            show(data,'info') {% endcomment %}
+            }
+
+            data = data + html +html1
+            show(data,'info') 
         })
        
         
