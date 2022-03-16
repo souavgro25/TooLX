@@ -1,19 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body style="margin: 35px;">
+{% extends 'base.html'%}
+
+{% block maincontent %}
+<div class="flex flex-col md:flex-row justify-around">
+    <div class="md:ml-20 ml-5 mt-10 flex-1">
+        <p class="text-xl text-gray-900 mb-5">
+            {{tool}}
+        </p>
+    
     <form method="post">
         {% csrf_token %}
-        <input type="text" placeholder="Enter IP or DNS" name="ip"><br><br>
-        <input type="submit" value="Enter Value"><br><br>
+        <input class="border-2 rounded-lg border-gray-400 px-2 md:px-3 w-56 md:w-60" type="text" placeholder="Enter IP or DNS" name="ip"><br><br>
+        <button class="  px-5 py-0.5 bg-green-500 rounded-lg flex items-center gap-x-1 md:gap-x-2 " type="submit" >Submit</button><br><br>
     </form>
-    <div style="color: white; background-color: black; width: 50%">
+</div>
+    <div class="text-gray-800 bg-white  w-xl m-auto mt-10 mr-10"  >
+        {% if p1  %}
+        <p class="text-xl text-black mb-5">Results</p>
+        {% endif %}
         {{p1|linebreaks}}
     </div>
-</body>
-</html>
+</div>
+
+
+
+{% endblock %}

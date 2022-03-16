@@ -1,4 +1,3 @@
-
 from concurrent.futures import process
 from os import read
 import readline
@@ -69,7 +68,9 @@ def indexnmap(request):
 #Ping
 #function made for ping
 def ping(request):
+    tool="Ping"
     if request.method == 'POST':
+        tool="Ping"
         ip = request.POST.get('ip')
         p= subprocess.run(['ping', '-c4', ip], capture_output=True, text=True)
         #if there is any eror output to catch that
@@ -80,16 +81,18 @@ def ping(request):
             p1= p.stdout
         else:
             p1= 'Provide the Valid input'
-        return render(request, 'home.html',{'p1': p1})
+        return render(request, 'home.html',{'p1': p1,'tool':tool})
     else:
-        return render(request, 'home.html')
+        return render(request, 'home.html',{'tool':tool})
 
 
 #Traceroute
 #function made for traceroute
 def traceroute (request):
+    tool="Traceroute"
     if request.method == 'POST':
         ip = request.POST.get('ip')
+        tool="Traceroute"
         p= subprocess.run(['traceroute', ip], capture_output=True, text=True)
         if p.stderr:
             p1= p.stderr
@@ -97,9 +100,9 @@ def traceroute (request):
             p1= p.stdout
         else:
             p1='provide the valid input'
-        return render(request, 'home.html', {'p1': p1})
+        return render(request, 'home.html', {'p1': p1,'tool':tool})
     else:
-        return render(request, 'home.html')
+        return render(request, 'home.html',{'tool':tool})
 
 
 #Hping3
