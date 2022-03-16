@@ -12,4 +12,5 @@ urlpatterns = [
     path('index_nmap',views.indexnmap,name="nmap"),
     path('ping', views.ping, name='ping'),
     path('traceroute', views.traceroute, name='traceroute'),
+    path('hping3', views.hping3, name='hping3'),
 ]
