@@ -99,6 +99,23 @@ def traceroute (request):
         return render(request, 'home.html')
 
 
+#AES Decrypter CBC mode
+
+
 #Hping3
 #function made for hping3
+def hping3(request):
+    if request.method== 'POST':
+        ip= request.POST.get('ip')
+        
+        p= subprocess.run(['hping3', '-1','--c', '4', ip], capture_output=True, text= True)
+        if p.stderr:
+            p1= p.stderr
+        elif p.stdout:
+            p1= p.stdout
+        else:
+            p1= 'provide the valid input'
+        return render(request, 'home.html', {'p1':p1})
+    else:
+        return render(request, 'home.html')
 
