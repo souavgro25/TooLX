@@ -6,7 +6,7 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('ab/<str:host>/<str:type>', views.nslookup, name='dnslookup'),
    
-    path('nmap/<str:host>/<str:port>/<str:id>',views.nmapscanner,name='portscanner'),
+    path('nmap/<str:host>/<str:port>/<str:command>',views.nmapscanner,name='portscanner'),
 
     path('about',views.about,name='about'),
     path('index_nmap',views.indexnmap,name="nmap"),
