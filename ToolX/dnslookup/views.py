@@ -8,10 +8,13 @@ from django.shortcuts import render
 import dns.resolver
 import subprocess
 import nmap
+from django.http import HttpResponse, JsonResponse
 
 from dnslookup.models import Ping, Tools
 
 def nslookup(request,host,type):
+    host = host.replace(" ", "").replace(
+			"(", "").replace(")", "").replace("+", "").replace("-", "").replace("/","")
     try:
         result = dns.resolver.query(host,type)
     except:
@@ -105,17 +108,28 @@ def traceroute (request):
 #Hping3
 #function made for hping3
 def hping3(request):
+    tool="hping3"
     if request.method== 'POST':
+        tool="hping3"
         ip= request.POST.get('ip')
-        
-        p= subprocess.run(['hping3', '-1','--c', '4', ip], capture_output=True, text= True)
+        try:
+            option= request.Post.get('option') 
+        except:
+            option= 1      
+        if (option==1):
+            p= subprocess.run(['hping3', '','--c', '4', ip], capture_output=True, text= True)
+        elif(option==2):
+            p= subprocess.run(['hping3', '-1','--c', '4', ip], capture_output=True, text= True)
+        elif(option==3):
+            p= subprocess.run(['hping3', '-2','--c', '4', ip], capture_output=True, text= True)
+
         if p.stderr:
             p1= p.stderr
         elif p.stdout:
             p1= p.stdout
         else:
             p1= 'provide the valid input'
-        return render(request, 'home.html', {'p1':p1})
+        return render(request, 'home.html', {'p1':p1,'tool':tool})
     else:
-        return render(request, 'home.html')
+        return render(request, 'home.html',{'tool':tool})
 

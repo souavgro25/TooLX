@@ -10,14 +10,41 @@
     <title>ToolX</title>
 </head>
 <body>
+    <style>
+        :root {
+        --base: #1c273a;
+        --white: #29ffff;
+        }
+        body{
+            background-color: #1c273a;
+
+        }
+        p,h1,h2,a{
+            color: var(--white) !important;
+        }
+        button{
+            background-color: var(--white) !important;
+        }
+        input{
+            border-color: var(--white) !important;
+            background-color: var(--base) !important;
+            color: var(--white) !important;
+        }
+        .remove{
+            display: none;
+        }
+        .add{
+            display: block;
+        }
+    </style>
     <nav class="flex justify-between px-5 py-4 bg-gray-800">
         <h1 class="text-xl text-white ">
             ToolX
         </h1>
         <div class="flex gap-2 mr-10 text-white">
-            <p>DNS</p>
-            <p>Hping</p>
-            <a href="{% url 'nmap'  %}">nmap</a>
+            <a href="{% url 'index'  %}">DNS</a>
+            <a href="{% url 'hping3'  %}">Hping3</a>
+            <a href="{% url 'nmap'  %}">Nmap</a>
         </div>
     </nav>
     {% block maincontent %}

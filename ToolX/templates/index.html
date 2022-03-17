@@ -29,12 +29,15 @@
 
 {% block script %}
 <script>
+   
 function showtypes(e){
     e.preventDefault()
     form1.prevent
     document.getElementById("types").classList.remove("hidden");
+   
 }
 function lookup(type){
+   
     var host = document.getElementById("host").value
     
     
@@ -42,9 +45,10 @@ function lookup(type){
     urlnew=url.replace("host",host).replace("AAA",type)
     let html="";
     fetch(urlnew)
+        
         .then((res)=> res.json())
         .then((res)=>{
-            
+           
             data = `<p class="mb-5 text-xl text-gray-900"> Results : </p> <p class="mt-2 ">Host : ${res.data.host}</p>
                     <p class="mt-2"> Type : ${res.data.type} </p> `
             res.data.records.map(i => {
@@ -54,11 +58,7 @@ function lookup(type){
             })
             data = data + html
             show(data,'info')
-        })
-       
-        
-        
-        
+        })     
         
 }
 function show(data,id){

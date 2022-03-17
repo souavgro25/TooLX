@@ -1,19 +1,22 @@
 {% extends 'base.html'%}
 
 {% block maincontent %}
-<div class="flex flex-col md:flex-row">
+<div style="background-color: #1c273a;" class="flex flex-col md:flex-row">
     <div class="md:ml-20 ml-5 mt-10 flex-1">
         <p class="text-xl text-gray-900 mb-5">
-            Nmap Port Scan 
+            Nmap Port Scan
         </p>
         <form id="form1" class="flex gap-x-5 ">
-             {% csrf_token %}
-            
-                <input id="host" class="border-2 rounded-lg border-gray-400 px-2 md:px-3 w-56 md:w-60" placeholder="Domains/IP" type="text">
-                <input id="port" class="border-2 rounded-lg border-gray-400 px-2 md:px-3 w-56 md:w-28" placeholder="Port (80)" type="text">
-             
-            
-            <button onclick="showtypes(event)" class="  px-5 py-0.5 bg-green-500 rounded-lg flex items-center gap-x-1 md:gap-x-2 ">Nmap
+            {% csrf_token %}
+
+            <input id="host" class="border-2 rounded-lg border-gray-400 px-2 md:px-3 w-56 md:w-60"
+                placeholder="Domains/IP" type="text">
+            <input id="port" class="border-2 rounded-lg border-gray-400 px-2 md:px-3 w-56 md:w-28"
+                placeholder="Port (80)" type="text">
+
+
+            <button onclick="showtypes(event)"
+                class="  px-5 py-0.5 bg-green-500 rounded-lg flex items-center gap-x-1 md:gap-x-2 ">Nmap
                 <i style="margin-top: -2px;" class="fas fa-caret-down"></i>
             </button>
         </form>
@@ -25,52 +28,77 @@
         </div>
     </div>
     <div id="info" class="mt-10 md:mt-5 flex-1 ml-5 md:ml-20">
-       
+        <div id="loading" class="loading ">
+            <img src="https://i.pinimg.com/originals/a2/dc/96/a2dc9668f2cf170fe3efeb263128b0e7.gif" alt="">
+        </div>
     </div>
 
 </div>
 
 {% block script %}
 <script>
-function showtypes(e){
-    e.preventDefault()
-    form1.prevent
-    document.getElementById("types").classList.remove("hidden");
-}
-function lookup(type){
-    var host = document.getElementById("host").value
-    var port = document.getElementById("port").value
-    
-    
-    url = "{% url 'portscanner' 'host' '80' '123' %}"
-    urlnew=url.replace("host",host).replace("123",type).replace("80",port)
-    let html="";
-    let html1="";
-    fetch(urlnew)
-        .then((res)=> res.json())
-        .then((res)=>{
-            console.log(res)
-            host = res.data.host
-            console.log(host)
-            data = `<p class="mb-5 text-xl text-gray-900"> Results : </p> <p class="mt-2 ">Command : ${res.data.scaninfo.nmap.command_line}</p>
-                    <p class="mt-2"> Type : ${res.data.scaninfo.scan[host].status.state} </p> `
-            for (const property in res.data.scaninfo.scan[host].tcp) {        
-            html += ` <p class="mt-2">${property} ${res.data.scaninfo.scan[host].tcp[property].state}  service : ${res.data.scaninfo.scan[host].tcp[property].name} ${res.data.scaninfo.scan[host].tcp[property].product} ${res.data.scaninfo.scan[host].tcp[property].version}</p> `  
-            
-            }
+    document.getElementById("loading").classList.add("remove")
+    function showtypes(e) {
 
-            data = data + html +html1
-            show(data,'info') 
-        })
-       
-        
-        
-        
-        
-}
-function show(data,id){
-    document.getElementById(id).innerHTML=data;
-}
+        e.preventDefault()
+        form1.prevent
+        document.getElementById("types").classList.remove("hidden");
+    }
+    function lookup(type) {
+        try {
+            document.getElementById("loading").classList.remove("remove")
+        }
+        catch {
+            console.log(1)
+        }
+        var host = document.getElementById("host").value
+        var port = document.getElementById("port").value
+        host = host.replace(" ", "").replace(
+            "(", "").replace(")", "").replace("+", "").replace("-", "").replace("/", "")
+
+        url = "{% url 'portscanner' 'host' '80' '123' %}"
+        urlnew = url.replace("host", host).replace("123", type).replace("80", port)
+        let html = "";
+        let html1 = "";
+        fetch(urlnew)
+            .then((res) => res.json())
+            .then((res) => {
+                try {
+                    document.getElementById("loading").classList.remove("remove")
+                }
+                catch {
+                    console.log("1")
+                }
+                console.log(res)
+                host = res.data.host
+                console.log(host)
+                if (res.data.scaninfo.nmap.scaninfo.error) {
+                    res.data.scaninfo.nmap.scaninfo.error.map(i => {
+                        data = `<p class="mb-5 text-xl text-gray-900"> Error : </p> <p class="mt-2 ">Command : ${res.data.scaninfo.nmap.command_line}</p>
+                    <p class="mt-2"> Type : ${i} </p>`
+                    })
+
+                }
+                else {
+                    data = `<p class="mb-5 text-xl text-gray-900"> Results : </p> <p class="mt-2 ">Command : ${res.data.scaninfo.nmap.command_line}</p>
+                    <p class="mt-2"> Type : ${res.data.scaninfo.scan[host].status.state} </p> `
+                    for (const property in res.data.scaninfo.scan[host].tcp) {
+                        html += ` <p class="mt-2">${property} ${res.data.scaninfo.scan[host].tcp[property].state}  service : ${res.data.scaninfo.scan[host].tcp[property].name} ${res.data.scaninfo.scan[host].tcp[property].product} ${res.data.scaninfo.scan[host].tcp[property].version}</p> `
+
+                    }
+                }
+                data = data + html + html1
+                show(data, 'info')
+            })
+
+
+
+
+
+    }
+    function show(data, id) {
+        document.getElementById(id).innerHTML = data;
+    }
 </script>
 
 {% endblock %}

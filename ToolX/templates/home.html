@@ -10,7 +10,17 @@
     <form method="post">
         {% csrf_token %}
         <input class="border-2 rounded-lg border-gray-400 px-2 md:px-3 w-56 md:w-60" type="text" placeholder="Enter IP or DNS" name="ip"><br><br>
+        <div class="flex mt-4 gap-x-4">
+            {% if tool == "hping3"  %}
+        <select style="color: var(--white);" class="bg-transparent " name="option" id="option">
+            <option value="1">TCP</option>
+            <option value="2">ICMP</option>
+            <option value="3">UDP</option>
+            
+          </select>
+          {% endif %}
         <button class="  px-5 py-0.5 bg-green-500 rounded-lg flex items-center gap-x-1 md:gap-x-2 " type="submit" >Submit</button><br><br>
+    </div>
     </form>
 </div>
     <div class="text-gray-800 bg-white  w-xl m-auto mt-10 mr-10"  >
