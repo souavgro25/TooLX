@@ -1,3 +1,4 @@
+
 from concurrent.futures import process
 from os import read
 import readline
@@ -34,14 +35,12 @@ def index(request):
    
 
 
-def nmapscanner(request,host, port,command):
-    
+def nmapscanner(request,host, port,id):
+    tool= Tools.objects.filter(id=id)
     nmScan = nmap.PortScanner()
     try:
-        scan = nmScan.scan(host,arguments=command+port)
-        host=nmScan.all_hosts() 
-        context={'host':host,'scaninfo':scan}
-            # if (type==1):
+        scan = nmScan.scan(host,arguments=tool.command+port)
+        # if (type==1):
         #     scan = nmScan.scan(host,arguments='-sV  -p'+port)
         # elif(type==2):
         #     scan = nmScan.scan(host,arguments='-sC -p'+port)
@@ -49,8 +48,7 @@ def nmapscanner(request,host, port,command):
         #     scan = nmScan.scan(host,arguments='--privileged -sU -p'+port)
         # elif(type==4):
         #     scan = nmScan.scan(host,arguments=' --privileged -sN -p'+port)
-
-        return JsonResponse({'data':context,"error":"0"})
+        return JsonResponse({'data':scan,"error":"0"})
     except:
         return JsonResponse({'data':"failed to scan this host ","error":"1"})
 
@@ -68,9 +66,7 @@ def indexnmap(request):
 #Ping
 #function made for ping
 def ping(request):
-    tool="Ping"
     if request.method == 'POST':
-        tool="Ping"
         ip = request.POST.get('ip')
         p= subprocess.run(['ping', '-c4', ip], capture_output=True, text=True)
         #if there is any eror output to catch that
@@ -81,18 +77,16 @@ def ping(request):
             p1= p.stdout
         else:
             p1= 'Provide the Valid input'
-        return render(request, 'home.html',{'p1': p1,'tool':tool})
+        return render(request, 'home.html',{'p1': p1})
     else:
-        return render(request, 'home.html',{'tool':tool})
+        return render(request, 'home.html')
 
 
 #Traceroute
 #function made for traceroute
 def traceroute (request):
-    tool="Traceroute"
     if request.method == 'POST':
         ip = request.POST.get('ip')
-        tool="Traceroute"
         p= subprocess.run(['traceroute', ip], capture_output=True, text=True)
         if p.stderr:
             p1= p.stderr
@@ -100,9 +94,9 @@ def traceroute (request):
             p1= p.stdout
         else:
             p1='provide the valid input'
-        return render(request, 'home.html', {'p1': p1,'tool':tool})
+        return render(request, 'home.html', {'p1': p1})
     else:
-        return render(request, 'home.html',{'tool':tool})
+        return render(request, 'home.html')
 
 
 #AES Decrypter CBC mode
