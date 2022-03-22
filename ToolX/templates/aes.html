@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form method="post">
+        {% csrf_token %}
+        {% if tool == "aesencryp" %}
+        <label for="plaintext">Plain Text:</label><br><br>
+        <textarea name="plaintext" id="1" cols="50" rows="10" placeholder="enter plain text"></textarea><br><br>
+        <label for="key">Enter key:</label><br>
+        <input id="key" name="key" placeholder="secret key" value="{{hexkey}}" ><br><br>
+        <label for="">IV (optional):</label>
+        <input type="number" id="iv" name="iv" placeholder="default- 0000000000000000"><br><br>
+        <button type="submit">Submit</button><br><br>
+        <label for="ciphertext">Cipher Text</label><br><br>
+        <textarea name="ciphertext" id="" cols="50" rows="10">{{ciphertext}}</textarea>
+        {% endif %}
+        {% if tool == "aesdecryp" %}
+        <label for="ciphertext">Cipher Text:</label><br><br>
+        <textarea name="ciphertext" id="1" cols="50" rows="10" placeholder="enter cipher text"></textarea><br><br>
+        <label for="key">Enter key:</label><br>
+        <input id="key" name="key" placeholder="secret key" ><br><br>
+        <label for="">IV (optional):</label>
+        <input type="number" id="iv" name="iv" placeholder="default- 0000000000000000"><br><br>
+        <button type="submit">Submit</button><br><br>
+        <label for="plaintext">Plain Text</label><br><br>
+        <textarea name="plaintext" id="" cols="50" rows="10">{{plaintext}}</textarea>
+        {% endif %}
+    </form>
+</body>
+</html>

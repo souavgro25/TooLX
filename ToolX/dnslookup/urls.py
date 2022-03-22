@@ -1,5 +1,4 @@
 from django.urls import path
-
 from . import views
 
 urlpatterns = [
@@ -13,4 +12,6 @@ urlpatterns = [
     path('ping', views.ping, name='ping'),
     path('traceroute', views.traceroute, name='traceroute'),
     path('hping3', views.hping3, name='hping3'),
+    path('aesencrypt', views.aesencrypt, name='aesencrypt'),
+    path('aesdecrypt', views.aesdecrypt, name='aesdecrypt'),
 ]

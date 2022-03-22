@@ -1,17 +1,16 @@
-
-from concurrent.futures import process
-from os import read
-import readline
-from subprocess import PIPE
-import shlex
+from json import tool
+from Crypto.Cipher import AES
 from django.shortcuts import render
 import dns.resolver
 import subprocess
 import nmap
 from django.http import HttpResponse, JsonResponse
-
 from dnslookup.models import Ping, Tools
+from base64 import b64decode
+from Crypto.Util.Padding import unpad,pad
 
+
+#######################################################################################################################
 def nslookup(request,host,type):
     host = host.replace(" ", "").replace(
 			"(", "").replace(")", "").replace("+", "").replace("-", "").replace("/","")
@@ -103,7 +102,40 @@ def traceroute (request):
 
 
 #AES Decrypter CBC mode
+def aesencrypt(request):
+    tool = "aesencryp"
+    if request.method == 'POST':
+        #encrypt
+        plaintext= request.POST.get('plaintext')
+        key= request.POST.get('key')
+        iv= request.POST.get('iv')
+        bplaintext= bytes(plaintext, 'utf-8')
+        bkey= bytes(key, 'utf-8')
+        biv= bytes(iv, 'utf-8')
+        cipher= AES.new(bkey,AES.MODE_CBC, iv= biv)
+        ciphertext= cipher.encrypt(pad(bplaintext,AES.block_size))
+        hextext= ciphertext.hex()
+        hexkey= bkey.hex()
+        return render(request, 'aes.html', {'ciphertext': hextext, 'tool': tool, 'hexkey': hexkey})
+    else:
+        return render(request, 'aes.html', {'tool': tool})
 
+def aesdecrypt(request):
+    tool= "aesdecryp"
+    if request.method == 'POST':
+        #decrypt
+        ciphertext=request.POST.get('ciphertext')
+        key= request.POST.get('key')
+        iv= request.POST.get('iv')
+        bciphertext= bytes.fromhex(ciphertext)
+        bkey= bytes.fromhex(key)
+        biv= bytes(iv, 'utf-8')
+        plain= AES.new(bkey, AES.MODE_CBC, biv)
+        bplaintext= unpad(plain.decrypt(bciphertext),AES.block_size)
+        plaintext= bplaintext.decode()
+        return render(request, 'aes.html', {'plaintext':plaintext, 'tool': tool})
+    else:
+        return render(request, 'aes.html', {'tool':tool})
 
 #Hping3
 #function made for hping3
@@ -117,7 +149,7 @@ def hping3(request):
         except:
             option= 1      
         if (option==1):
-            p= subprocess.run(['hping3', '','--c', '4', ip], capture_output=True, text= True)
+            p= subprocess.run(['hping3', '--c', '4', ip], capture_output=True, text= True)
         elif(option==2):
             p= subprocess.run(['hping3', '-1','--c', '4', ip], capture_output=True, text= True)
         elif(option==3):
