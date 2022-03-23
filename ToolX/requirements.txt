@@ -4,3 +4,4 @@ psycopg2-binary
 dnspython==2.2.0
 mysqlclient
 python-nmap==0.7.1
+pycryptodome==3.14.1
