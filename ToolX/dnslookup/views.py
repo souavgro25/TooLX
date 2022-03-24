@@ -1,13 +1,12 @@
 from json import tool
-from Crypto.Cipher import AES
+from Crypto.Cipher import AES  #import AES from library
 from django.shortcuts import render
 import dns.resolver
 import subprocess
 import nmap
 from django.http import HttpResponse, JsonResponse
 from dnslookup.models import Ping, Tools
-from base64 import b64decode
-from Crypto.Util.Padding import unpad,pad
+from Crypto.Util.Padding import unpad, pad #import pad unpad from library
 
 
 #######################################################################################################################
@@ -72,7 +71,7 @@ def indexnmap(request):
 def ping(request):
     if request.method == 'POST':
         ip = request.POST.get('ip')
-        p= subprocess.run(['ping', '-c4', ip], capture_output=True, text=True)
+        p= subprocess.run(['ping', '-c4', ip], capture_output=True, text=True)#subprocess run command from command line
         #if there is any eror output to catch that
         if p.stderr:
             p1= p.stderr
@@ -91,9 +90,11 @@ def ping(request):
 def traceroute (request):
     if request.method == 'POST':
         ip = request.POST.get('ip')
-        p= subprocess.run(['traceroute', ip], capture_output=True, text=True)
+        p= subprocess.run(['traceroute', ip], capture_output=True, text=True)#subprocess run command from command line
+        #if there is any eror output to catch that
         if p.stderr:
             p1= p.stderr
+        #else it will catch the output
         elif p.stdout:
             p1= p.stdout
         else:
@@ -108,14 +109,16 @@ def aesencrypt(request):
     tool = "aesencryp"
     if request.method == 'POST':
         #encrypt
-        plaintext= request.POST.get('plaintext')
-        key= request.POST.get('key')
-        iv= request.POST.get('iv')
+        plaintext= request.POST.get('plaintext')#take textas input from user
+        key= request.POST.get('key')# take key as input from user
+        iv= request.POST.get('iv')#take iv from user which is bydefault 0000000000000000
+        #converting input to bytes
         bplaintext= bytes(plaintext, 'utf-8')
         bkey= bytes(key, 'utf-8')
         biv= bytes(iv, 'utf-8')
         cipher= AES.new(bkey,AES.MODE_CBC, iv= biv)
         ciphertext= cipher.encrypt(pad(bplaintext,AES.block_size))
+        #converting the cipher text and key to hex values
         hextext= ciphertext.hex()
         hexkey= bkey.hex()
         return render(request, 'aes.html', {'ciphertext': hextext, 'tool': tool, 'hexkey': hexkey})
@@ -126,9 +129,10 @@ def aesdecrypt(request):
     tool= "aesdecryp"
     if request.method == 'POST':
         #decrypt
-        ciphertext=request.POST.get('ciphertext')
-        key= request.POST.get('key')
-        iv= request.POST.get('iv')
+        ciphertext=request.POST.get('ciphertext')#take ciphertext as input from user
+        key= request.POST.get('key')#take key as input from user
+        iv= request.POST.get('iv')#take iv fro user as input
+        #converting hex values to byte
         bciphertext= bytes.fromhex(ciphertext)
         bkey= bytes.fromhex(key)
         biv= bytes(iv, 'utf-8')
