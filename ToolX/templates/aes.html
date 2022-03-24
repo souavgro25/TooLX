@@ -18,8 +18,8 @@
         <textarea name="plaintext" id="1" cols="50" rows="10" placeholder="enter plain text"></textarea><br><br>
         <p for="key">Enter key:</p><br>
         <input id="key" name="key" placeholder="secret key" value="{{hexkey}}" ><br><br>
-        <p for="">IV (optional):</p>
-        <input type="number" id="iv" name="iv" placeholder="default- 0000000000000000"><br><br>
+        <p for="">IV (by default):</p>
+        <input type="number" id="iv" name="iv" placeholder="default- 0000000000000000" value="0000000000000000"><br><br>
         <button class="px-5 py-2 rounded" type="submit">Submit</button><br><br>
         <p for="ciphertext">Cipher Text</p><br><br>
         <textarea name="ciphertext" id="" cols="50" rows="10">{{ciphertext}}</textarea>
