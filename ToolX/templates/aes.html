@@ -8,14 +8,16 @@
 </style>
 <div>   
     <div class="md:ml-20 ml-5 mt-10 flex-1">
-        <p class="text-xl text-gray-900 mb-5">
-            {{tool}}
-        </p>
      <form method="post">
         {% csrf_token %}
         {% if tool == "aesencryp" %}
         <p for="plaintext">Plain Text:</p><br><br>
         <textarea name="plaintext" id="1" cols="50" rows="10" placeholder="enter plain text"></textarea><br><br>
+        {% if messages %}
+        {% for message in messages %}
+        <small>{{message}}</small>
+        {% endfor %}
+        {% endif %}
         <p for="key">Enter key:</p><br>
         <input id="key" name="key" placeholder="secret key" value="{{hexkey}}" ><br><br>
         <p for="">IV (by default):</p>

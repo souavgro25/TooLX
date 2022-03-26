@@ -1,3 +1,4 @@
+from curses.ascii import HT
 from json import tool
 from Crypto.Cipher import AES  #import AES from library
 from django.shortcuts import render
@@ -7,7 +8,7 @@ import nmap
 from django.http import HttpResponse, JsonResponse
 from dnslookup.models import Ping, Tools
 from Crypto.Util.Padding import unpad, pad #import pad unpad from library
-
+from django.contrib import messages
 
 #######################################################################################################################
 def nslookup(request,host,type):
@@ -69,39 +70,45 @@ def indexnmap(request):
 #Ping
 #function made for ping
 def ping(request):
-    if request.method == 'POST':
-        ip = request.POST.get('ip')
-        p= subprocess.run(['ping', '-c4', ip], capture_output=True, text=True)#subprocess run command from command line
-        #if there is any eror output to catch that
-        if p.stderr:
-            p1= p.stderr
-        #else it will catch the output
-        elif p.stdout:
-            p1= p.stdout
+    try:
+        if request.method == 'POST':
+            ip = request.POST.get('ip')
+            p= subprocess.run(['ping', '-c4', ip], capture_output=True, text=True)#subprocess run command from command line
+            #if there is any eror output to catch that
+            if p.stderr:
+                p1= p.stderr
+            #else it will catch the output
+            elif p.stdout:
+                p1= p.stdout
+            else:
+                p1= 'Provide the Valid input'
+            return render(request, 'home.html',{'p1': p1})
         else:
-            p1= 'Provide the Valid input'
-        return render(request, 'home.html',{'p1': p1})
-    else:
-        return render(request, 'home.html')
+            return render(request, 'home.html')
+    except:
+        return HttpResponse("Invalid Request")
 
 
 #Traceroute
 #function made for traceroute
 def traceroute (request):
-    if request.method == 'POST':
-        ip = request.POST.get('ip')
-        p= subprocess.run(['traceroute', ip], capture_output=True, text=True)#subprocess run command from command line
-        #if there is any eror output to catch that
-        if p.stderr:
-            p1= p.stderr
-        #else it will catch the output
-        elif p.stdout:
-            p1= p.stdout
+    try:
+        if request.method == 'POST':
+            ip = request.POST.get('ip')
+            p= subprocess.run(['traceroute', ip], capture_output=True, text=True)#subprocess run command from command line
+            #if there is any eror output to catch that
+            if p.stderr:
+                p1= p.stderr
+            #else it will catch the output
+            elif p.stdout:
+                p1= p.stdout
+            else:
+                p1='provide the valid input'
+            return render(request, 'home.html', {'p1': p1})
         else:
-            p1='provide the valid input'
-        return render(request, 'home.html', {'p1': p1})
-    else:
-        return render(request, 'home.html')
+            return render(request, 'home.html')
+    except:
+        return HttpResponse("Invalid Request")
 
 
 #AES Decrypter CBC mode
@@ -113,14 +120,17 @@ def aesencrypt(request):
         key= request.POST.get('key')# take key as input from user
         iv= request.POST.get('iv')#take iv from user which is bydefault 0000000000000000
         #converting input to bytes
-        bplaintext= bytes(plaintext, 'utf-8')
-        bkey= bytes(key, 'utf-8')
-        biv= bytes(iv, 'utf-8')
-        cipher= AES.new(bkey,AES.MODE_CBC, iv= biv)
-        ciphertext= cipher.encrypt(pad(bplaintext,AES.block_size))
-        #converting the cipher text and key to hex values
-        hextext= ciphertext.hex()
-        hexkey= bkey.hex()
+        if len(key) != 32:
+            messages.add_message(request, messages.INFO, 'key size should be 32bytes(256bits)')
+        else:
+            bplaintext= bytes(plaintext, 'utf-8')
+            bkey= bytes(key, 'utf-8')
+            biv= bytes(iv, 'utf-8')
+            cipher= AES.new(bkey,AES.MODE_CBC, iv= biv)
+            ciphertext= cipher.encrypt(pad(bplaintext,AES.block_size))
+            #converting the cipher text and key to hex values
+            hextext= ciphertext.hex()
+            hexkey= bkey.hex()
         return render(request, 'aes.html', {'ciphertext': hextext, 'tool': tool, 'hexkey': hexkey})
     else:
         return render(request, 'aes.html', {'tool': tool})
@@ -147,27 +157,30 @@ def aesdecrypt(request):
 #function made for hping3
 def hping3(request):
     tool="hping3"
-    if request.method== 'POST':
-        tool="hping3"
-        ip= request.POST.get('ip')
-        try:
-            option= request.Post.get('option') 
-        except:
-            option= 1      
-        if (option==1):
-            p= subprocess.run(['hping3', '--c', '4', ip], capture_output=True, text= True)
-        elif(option==2):
-            p= subprocess.run(['hping3', '-1','--c', '4', ip], capture_output=True, text= True)
-        elif(option==3):
-            p= subprocess.run(['hping3', '-2','--c', '4', ip], capture_output=True, text= True)
+    try:
+        if request.method== 'POST':
+            tool="hping3"
+            ip= request.POST.get('ip')
+            try:
+                option= request.Post.get('option') 
+            except:
+                option= 1      
+            if (option==1):
+                p= subprocess.run(['hping3', '-S', '--c', '4', ip], capture_output=True, text= True)
+            elif(option==2):
+                p= subprocess.run(['hping3', '-1','--c', '4', ip], capture_output=True, text= True)
+            elif(option==3):
+                p= subprocess.run(['hping3', '-2','--c', '4', ip], capture_output=True, text= True)
 
-        if p.stderr:
-            p1= p.stderr
-        elif p.stdout:
-            p1= p.stdout
+            if p.stderr:
+                p1= p.stderr
+            elif p.stdout:
+                p1= p.stdout
+            else:
+                p1= 'provide the valid input'
+            return render(request, 'home.html', {'p1':p1,'tool':tool})
         else:
-            p1= 'provide the valid input'
-        return render(request, 'home.html', {'p1':p1,'tool':tool})
-    else:
-        return render(request, 'home.html',{'tool':tool})
+            return render(request, 'home.html',{'tool':tool})
+    except:
+        return HttpResponse("Invalid Request")
 
