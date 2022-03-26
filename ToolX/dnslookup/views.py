@@ -1,14 +1,13 @@
 from curses.ascii import HT
 from json import tool
 from Crypto.Cipher import AES  #import AES from library
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 import dns.resolver
 import subprocess
 import nmap
-from django.http import HttpResponse, JsonResponse
-from dnslookup.models import Ping, Tools
+from django.http import JsonResponse
+from dnslookup.models import Tools
 from Crypto.Util.Padding import unpad, pad #import pad unpad from library
-from django.contrib import messages
 
 #######################################################################################################################
 def nslookup(request,host,type):
@@ -86,7 +85,7 @@ def ping(request):
         else:
             return render(request, 'home.html')
     except:
-        return HttpResponse("Invalid Request")
+        return redirect('ping')
 
 
 #Traceroute
@@ -108,21 +107,19 @@ def traceroute (request):
         else:
             return render(request, 'home.html')
     except:
-        return HttpResponse("Invalid Request")
+        return redirect('traceroute')
 
 
 #AES Decrypter CBC mode
 def aesencrypt(request):
     tool = "aesencryp"
-    if request.method == 'POST':
-        #encrypt
-        plaintext= request.POST.get('plaintext')#take textas input from user
-        key= request.POST.get('key')# take key as input from user
-        iv= request.POST.get('iv')#take iv from user which is bydefault 0000000000000000
-        #converting input to bytes
-        if len(key) != 32:
-            messages.add_message(request, messages.INFO, 'key size should be 32bytes(256bits)')
-        else:
+    try:
+        if request.method == 'POST':
+            #encrypt
+            plaintext= request.POST.get('plaintext')#take textas input from user
+            key= request.POST.get('key')# take key as input from user
+            iv= request.POST.get('iv')#take iv from user which is bydefault 0000000000000000
+            #converting input to bytes
             bplaintext= bytes(plaintext, 'utf-8')
             bkey= bytes(key, 'utf-8')
             biv= bytes(iv, 'utf-8')
@@ -131,27 +128,34 @@ def aesencrypt(request):
             #converting the cipher text and key to hex values
             hextext= ciphertext.hex()
             hexkey= bkey.hex()
-        return render(request, 'aes.html', {'ciphertext': hextext, 'tool': tool, 'hexkey': hexkey})
-    else:
-        return render(request, 'aes.html', {'tool': tool})
+            return render(request, 'aes.html', {'ciphertext': hextext, 'tool': tool, 'hexkey': hexkey})
+        else:
+            return render(request, 'aes.html', {'tool': tool})
+    except (ValueError, KeyError):
+        message= "Enter valid key and value"
+        return render(request, 'aes.html', {'messages': message, 'tool': tool})
 
 def aesdecrypt(request):
     tool= "aesdecryp"
-    if request.method == 'POST':
-        #decrypt
-        ciphertext=request.POST.get('ciphertext')#take ciphertext as input from user
-        key= request.POST.get('key')#take key as input from user
-        iv= request.POST.get('iv')#take iv fro user as input
-        #converting hex values to byte
-        bciphertext= bytes.fromhex(ciphertext)
-        bkey= bytes.fromhex(key)
-        biv= bytes(iv, 'utf-8')
-        plain= AES.new(bkey, AES.MODE_CBC, biv)
-        bplaintext= unpad(plain.decrypt(bciphertext),AES.block_size)
-        plaintext= bplaintext.decode()
-        return render(request, 'aes.html', {'plaintext':plaintext, 'tool': tool})
-    else:
-        return render(request, 'aes.html', {'tool':tool})
+    try:
+        if request.method == 'POST':
+            #decrypt
+            ciphertext=request.POST.get('ciphertext')#take ciphertext as input from user
+            key= request.POST.get('key')#take key as input from user
+            iv= request.POST.get('iv')#take iv fro user as input
+            #converting hex values to byte
+            bciphertext= bytes.fromhex(ciphertext)
+            bkey= bytes.fromhex(key)
+            biv= bytes(iv, 'utf-8')
+            plain= AES.new(bkey, AES.MODE_CBC, biv)
+            bplaintext= unpad(plain.decrypt(bciphertext),AES.block_size)
+            plaintext= bplaintext.decode()
+            return render(request, 'aes.html', {'plaintext':plaintext, 'tool': tool})
+        else:
+            return render(request, 'aes.html', {'tool':tool})
+    except (ValueError, KeyError):
+        message= "Enter valid key and value"
+        return render(request, 'aes.html', {'messages': message, 'tool': tool})
 
 #Hping3
 #function made for hping3
@@ -182,5 +186,5 @@ def hping3(request):
         else:
             return render(request, 'home.html',{'tool':tool})
     except:
-        return HttpResponse("Invalid Request")
+        return redirect('hping3')
 
