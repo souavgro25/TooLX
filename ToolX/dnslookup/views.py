@@ -132,7 +132,7 @@ def aesencrypt(request):
         else:
             return render(request, 'aes.html', {'tool': tool})
     except (ValueError, KeyError):
-        message= "Enter valid key and value"
+        message= "Enter valid key size and value"
         return render(request, 'aes.html', {'messages': message, 'tool': tool})
 
 def aesdecrypt(request):
@@ -154,7 +154,7 @@ def aesdecrypt(request):
         else:
             return render(request, 'aes.html', {'tool':tool})
     except (ValueError, KeyError):
-        message= "Enter valid key and value"
+        message= "Enter valid key size and value"
         return render(request, 'aes.html', {'messages': message, 'tool': tool})
 
 #Hping3
