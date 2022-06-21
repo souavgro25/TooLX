@@ -8,7 +8,10 @@ import nmap
 from django.http import JsonResponse
 from dnslookup.models import Tools
 from Crypto.Util.Padding import unpad, pad #import pad unpad from library
-
+from django.conf import settings
+import shodan
+SHODAN_API_KEY = settings.GOOGLE_MAPS_API_KEY
+print(SHODAN_API_KEY)
 #######################################################################################################################
 def nslookup(request,host,type):
     host = host.replace(" ", "").replace(
@@ -188,3 +191,68 @@ def hping3(request):
     except:
         return redirect('hping3')
 
+#whatweb
+#function made for whatweb
+def whatweb (request):
+    try:
+        if request.method == 'POST':
+            ip = request.POST.get('ip')
+            p= subprocess.run(['whatweb','-v', ip], capture_output=True, text=True)#subprocess run command from command line
+            #if there is any eror output to catch that
+            if p.stderr:
+                p1= p.stderr
+            #else it will catch the output
+            elif p.stdout:
+                p1= p.stdout
+            else:
+                p1='provide the valid input'
+            return render(request, 'home.html', {'p1': p1})
+        else:
+            return render(request, 'home.html')
+    except:
+        return redirect('whatweb')
+
+def assetfinder (request):
+    try:
+        if request.method == 'POST':
+            ip = request.POST.get('ip')
+            p= subprocess.run(['assetfinder','-subs-only', ip], capture_output=True, text=True)#subprocess run command from command line
+            #if there is any eror output to catch that
+            if p.stderr:
+                p1= p.stderr
+            #else it will catch the output
+            elif p.stdout:
+                p1= p.stdout
+            else:
+                p1='provide the valid input'
+            return render(request, 'home.html', {'p1': p1})
+        else:
+            return render(request, 'home.html')
+    except:
+        return redirect('assetfinder')
+
+def shodansearch(request,query):
+    print('hello')
+    api = shodan.Shodan('kYSgjMiDOH2Nd4Qi3Z2DtJcP9fjVCIGU')
+    try:
+        # Search Shodan
+        results = api.search(query)
+
+        # Show the results
+        # print('Results found: {}'.format(results['total']))
+        # for result in results['matches']:
+        #         print('IP: {}'.format(result['ip_str']))
+        #         print(result['data'])
+        #         print('')
+        return JsonResponse({'data':results,"error":"0"})
+    except (shodan.APIError):
+       
+        return JsonResponse({'data':results,"error":"1"})
+    
+def index_shodan(request):
+    tool= Tools.objects.filter(Toolname='Dns')
+    print(tool)
+    context ={
+        'Tool':tool
+    }
+    return render(request,'shodan.html',context)
