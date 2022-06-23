@@ -12,9 +12,12 @@ urlpatterns = [
     path('ping', views.ping, name='ping'),
     path('whatweb', views.whatweb, name='whatweb'),
     path('assetfinder', views.assetfinder, name='assetfinder'),
+    path('whoislookup', views.whoislookup, name='whoislookup'),
     path('shodansearch/<str:query>', views.shodansearch, name='shodansearch'),
+    path('md5hash', views.MD5hash, name='md5hash'),
     path('traceroute', views.traceroute, name='traceroute'),
     path('hping3', views.hping3, name='hping3'),
     path('aesencrypt', views.aesencrypt, name='aesencrypt'),
     path('aesdecrypt', views.aesdecrypt, name='aesdecrypt'),
+    path('shodan', views.index_shodan, name='index_shodan'),
 ]

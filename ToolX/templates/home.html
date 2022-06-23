@@ -9,9 +9,13 @@
     
     <form method="post">
         {% csrf_token %}
-        <input class="border-2 rounded-lg border-gray-400 px-2 md:px-3 w-56 md:w-60" type="text" placeholder="Enter IP or DNS" name="ip"><br><br>
+        {% if tool == "md5hash"  %}
+        <input class="border-2 rounded-lg border-gray-400 px-2 md:px-3 w-56 md:w-60" type="text" placeholder="md5 hash" name="ip"><br><br>
+        {% else %}
+        <input class="border-2  rounded-lg border-gray-400 px-2 md:px-3 w-56 md:w-60" type="text" placeholder="Enter IP or DNS" name="ip"><br><br>
+        {% endif %}
         <div class="flex mt-4 gap-x-4">
-            {% if tool == "hping3"  %}
+            {% if tool == "hping"  %}
         <select style="color: var(--white);" class="bg-transparent " name="option" id="option">
             <option value="1">TCP</option>
             <option value="2">ICMP</option>

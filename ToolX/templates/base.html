@@ -44,13 +44,20 @@
         .submit{
             padding: 10px;
         }
+        .bg-color{
+            background-color: #1c273a;
+        }
     </style>
     <nav class="flex justify-between px-5 py-4 bg-gray-800">
         <h1 class="text-xl text-white ">
             ToolX
         </h1>
         <div class="flex gap-2 mr-10 text-white">
-            <a href="{% url 'index'  %}">DNS</a>
+            <a href="{% url 'whatweb'  %}">whatweb</a>
+            <a href="{% url 'md5hash'  %}">md5 hash cracking</a>
+            <a href="{% url 'assetfinder'  %}">subdomains finder </a>
+            <a href="{% url 'index_shodan'  %}">shodan search</a>
+            <a href="{% url 'whoislookup'  %}">whois lookup</a>
             <a href="{% url 'hping3'  %}">Hping3</a>
             <a href="{% url 'nmap'  %}">Nmap</a>
             <a href="{% url 'ping'  %}">Ping</a>

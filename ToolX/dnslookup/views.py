@@ -11,6 +11,7 @@ from Crypto.Util.Padding import unpad, pad #import pad unpad from library
 from django.conf import settings
 import shodan
 SHODAN_API_KEY = settings.GOOGLE_MAPS_API_KEY
+
 print(SHODAN_API_KEY)
 #######################################################################################################################
 def nslookup(request,host,type):
@@ -72,6 +73,7 @@ def indexnmap(request):
 #Ping
 #function made for ping
 def ping(request):
+    tool = "Ping"
     try:
         if request.method == 'POST':
             ip = request.POST.get('ip')
@@ -84,9 +86,9 @@ def ping(request):
                 p1= p.stdout
             else:
                 p1= 'Provide the Valid input'
-            return render(request, 'home.html',{'p1': p1})
+            return render(request, 'home.html',{'p1': p1,"tool":tool})
         else:
-            return render(request, 'home.html')
+            return render(request, 'home.html',{"tool":tool})
     except:
         return redirect('ping')
 
@@ -94,6 +96,7 @@ def ping(request):
 #Traceroute
 #function made for traceroute
 def traceroute (request):
+    tool = "traceroute"
     try:
         if request.method == 'POST':
             ip = request.POST.get('ip')
@@ -106,9 +109,9 @@ def traceroute (request):
                 p1= p.stdout
             else:
                 p1='provide the valid input'
-            return render(request, 'home.html', {'p1': p1})
+            return render(request, 'home.html', {'p1': p1,"tool":tool})
         else:
-            return render(request, 'home.html')
+            return render(request, 'home.html',{"tool":tool})
     except:
         return redirect('traceroute')
 
@@ -194,6 +197,7 @@ def hping3(request):
 #whatweb
 #function made for whatweb
 def whatweb (request):
+    tool = "whatweb"
     try:
         if request.method == 'POST':
             ip = request.POST.get('ip')
@@ -206,13 +210,14 @@ def whatweb (request):
                 p1= p.stdout
             else:
                 p1='provide the valid input'
-            return render(request, 'home.html', {'p1': p1})
+            return render(request, 'home.html', {'p1': p1,"tool":tool})
         else:
-            return render(request, 'home.html')
+            return render(request, 'home.html',{"tool":tool})
     except:
         return redirect('whatweb')
 
 def assetfinder (request):
+    tool = "subdomains finder"
     try:
         if request.method == 'POST':
             ip = request.POST.get('ip')
@@ -225,15 +230,16 @@ def assetfinder (request):
                 p1= p.stdout
             else:
                 p1='provide the valid input'
-            return render(request, 'home.html', {'p1': p1})
+            return render(request, 'home.html', {'p1': p1,"tool":tool})
         else:
-            return render(request, 'home.html')
+            return render(request, 'home.html',{"tool":tool})
     except:
         return redirect('assetfinder')
 
 def shodansearch(request,query):
     print('hello')
     api = shodan.Shodan('kYSgjMiDOH2Nd4Qi3Z2DtJcP9fjVCIGU')
+    results = api.search(query)
     try:
         # Search Shodan
         results = api.search(query)
@@ -247,12 +253,47 @@ def shodansearch(request,query):
         return JsonResponse({'data':results,"error":"0"})
     except (shodan.APIError):
        
-        return JsonResponse({'data':results,"error":"1"})
+        return JsonResponse({'data':" search not successfull","error":"1"})
+
+def whoislookup(request):
+    tool="whois lookup"
+    try:
+        if request.method == 'POST':
+            ip = request.POST.get('ip')
+            p= subprocess.run(['whois', ip], capture_output=True, text=True)#subprocess run command from command line
+            #if there is any eror output to catch that
+            if p.stderr:
+                p1= p.stderr
+            #else it will catch the output
+            elif p.stdout:
+                p1= p.stdout
+            else:
+                p1='provide the valid input'
+            return render(request, 'home.html', {'p1': p1,"tool":tool})
+        else:
+            return render(request, 'home.html',{"tool":tool})
+    except:
+        return redirect('whoislookup')
+
+def MD5hash(request):
+    tool="md5hash"
+    try:
+        if request.method == 'POST':
+            ip = request.POST.get('ip')
+            p= subprocess.run(['hashcat','-m0','-a0',ip,'rockyou.txt','--show'], capture_output=True, text=True)#subprocess run command from command line
+            #if there is any eror output to catch that
+            if p.stderr:
+                p1= p.stderr
+            #else it will catch the output
+            elif p.stdout:
+                p1= p.stdout
+            else:
+                p1='provide the valid input'
+            return render(request, 'home.html', {'p1': p1,'tool':tool})
+        else:
+            return render(request, 'home.html',{'tool':tool})
+    except:
+        return redirect('whoislookup')
     
 def index_shodan(request):
-    tool= Tools.objects.filter(Toolname='Dns')
-    print(tool)
-    context ={
-        'Tool':tool
-    }
-    return render(request,'shodan.html',context)
+    return render(request,'shodan.html')
