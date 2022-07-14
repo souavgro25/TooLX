@@ -27,7 +27,7 @@ GOOGLE_MAPS_API_KEY = os.environ.get('GOOGLE_MAPS_API_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.0.8', '127.0.0.1']
+ALLOWED_HOSTS = ['192.168.0.8', '127.0.0.1','172.28.116.197']
 
 
 # Application definition
@@ -78,12 +78,8 @@ WSGI_APPLICATION = 'ToolX.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'projectx',
-        'USER': 'sammy',
-        'PASSWORD': 'password',
-        'HOST': 'localhost',
-
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
