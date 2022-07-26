@@ -12,11 +12,12 @@
 <body>
     <style>
         :root {
-        --base: #1c273a;
-        --white: #29ffff;
+        --secondary: #83c5be;
+        --base: #006d77;
+        --white: #edf6f9;
         }
         body{
-            background-color: #1c273a;
+            background-color: var(--base);
 
         }
         p,h1,h2,a{
@@ -47,13 +48,52 @@
         .bg-color{
             background-color: #1c273a;
         }
+        .sidebar{
+            background-color: var(--secondary);
+            height: 100vh;
+            border-radius: 0px 10px;
+            min-width: 220px;
+        }
+        .sidebar a {
+            transition: 0.2s all;
+            color: var(--base) !important;
+        }
+        .sidebar-menu a:hover{
+            display: block;
+            border: 1px solid var(--white);
+            border-radius: 10px;
+            padding:10px 5px 10px 5px;
+            transition-delay:0.5s;
+            color: var(--white) !important;
+            background-color: var(--base);
+        }
+        .base{
+            background-color: var(--base) !important;
+        }
+        .secondary{
+            background-color: var(--secondary) !important;
+        }
+        .text-color{
+            color: var(--white) !important;
+        }
+        .text-secondary{
+            color: var(--base) !important;
+        }
+        .loading {
+            
+            margin-left: 100px;
+            margin-top: 50px;
+        }
     </style>
-    <nav class="flex justify-between px-5 py-4 bg-gray-800">
-        <h1 class="text-xl text-white ">
+    <nav style="color:var(--base)" class="flex  items-center px-5 py-4 ">
+        <svg id="toggle" xmlns="http://www.w3.org/2000/svg" style="color: var(--white)" class=" h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+        <h1 class="text-xl ml-10">
             ToolX
         </h1>
-        <div class="flex gap-2 mr-10 text-white">
-            <a href="{% url 'whatweb'  %}">whatweb</a>
+        <!-- <div class="flex gap-2 mr-10 text-white">
+            <a href="{% url 'wordpress_scan'  %}">wordpress scan</a>
             <a href="{% url 'md5hash'  %}">md5 hash cracking</a>
             <a href="{% url 'assetfinder'  %}">subdomains finder </a>
             <a href="{% url 'index_shodan'  %}">shodan search</a>
@@ -64,13 +104,42 @@
             <a href="{% url 'traceroute'  %}">Traceroute</a>
             <a href="{% url 'aesencrypt'  %}">Encrypt</a>
             <a href="{% url 'aesdecrypt'  %}">Decrypt</a>
-        </div>
+        </div> -->
     </nav>
+    <div class="flex "> 
+        <div class="sidebar">
+            <div  class="sidebar-menu ml-5 mt-10 flex flex-col gap-4 mr-10 text-white items-center">
+                <a href="{% url 'wordpress_scan'  %}">wordpress scan</a>
+
+                <a href="{% url 'md5hash'  %}">md5 hash cracking</a>
+                <a href="{% url 'assetfinder'  %}">subdomains finder </a>
+                <a href="{% url 'index_shodan'  %}">shodan search</a>
+                <a href="{% url 'whoislookup'  %}">whois lookup</a>
+                <a href="{% url 'hping3'  %}">Hping3</a>
+                <a href="{% url 'nmap'  %}">Nmap</a>
+                <a href="{% url 'ping'  %}">Ping</a>
+                <a href="{% url 'traceroute'  %}">Traceroute</a>
+                <a href="{% url 'aesencrypt'  %}">Encrypt</a>
+                <a href="{% url 'aesdecrypt'  %}">Decrypt</a>
+            </div>
+        </div>
     {% block maincontent %}
 
     {% endblock %}
+    </div>
     {% block script %}
 
     {% endblock %}
+    <script>
+        document.querySelector("#toggle").addEventListener('click',()=>{
+            document.querySelector(".sidebar").classList.toggle("hidden")
+        })
+
+        function loading(){
+        document.getElementById("info").innerHTML = `<div id="loading" class="loading ">
+            <img src="https://icaengineeringacademy.com/wp-content/uploads/2019/01/ajax-loading-gif-transparent-background-2.gif" alt="">
+        </div>`
+    }
+    </script>
 </body>
 </html>

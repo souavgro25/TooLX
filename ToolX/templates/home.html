@@ -1,7 +1,7 @@
 {% extends 'base.html'%}
 
 {% block maincontent %}
-<div class="flex flex-col md:flex-row justify-around">
+<div class="flex flex-col md:flex-row justify-around w-full">
     <div class="md:ml-20 ml-5 mt-10 flex-1">
         <p class="text-xl text-gray-900 mb-5">
             {{tool}}
@@ -10,28 +10,30 @@
     <form method="post">
         {% csrf_token %}
         {% if tool == "md5hash"  %}
-        <input class="border-2 rounded-lg border-gray-400 px-2 md:px-3 w-56 md:w-60" type="text" placeholder="md5 hash" name="ip"><br><br>
+        <input class="border-2 rounded-lg  border-gray-400 px-2 md:px-3 w-56 md:w-60" type="text" placeholder="md5 hash" name="ip"><br><br>
         {% else %}
         <input class="border-2  rounded-lg border-gray-400 px-2 md:px-3 w-56 md:w-60" type="text" placeholder="Enter IP or DNS" name="ip"><br><br>
         {% endif %}
         <div class="flex mt-4 gap-x-4">
-            {% if tool == "hping"  %}
+            {% if tool == "hping3"  %}
         <select style="color: var(--white);" class="bg-transparent " name="option" id="option">
-            <option value="1">TCP</option>
             <option value="2">ICMP</option>
+            <option value="2">TCP</option>
             <option value="3">UDP</option>
             
           </select>
           {% endif %}
-        <button class="  px-5 py-0.5 bg-green-500 rounded-lg flex items-center gap-x-1 md:gap-x-2 " type="submit" >Submit</button><br><br>
+        <button class="  px-5 py-0.5 secondary rounded-lg flex items-center gap-x-1 md:gap-x-2 " type="submit" >Submit</button><br><br>
     </div>
     </form>
 </div>
     <div style="background-color: var(--base); max-width: 50%;" class="text-gray-800 bg-white  w-xl m-auto mt-10 mr-10"  >
         {% if p1  %}
-        <p class="text-xl text-black mb-5">Results</p>
+        <p class="text-xl  text-black mb-5">Results</p>
         {% endif %}
-        {{p1|linebreaks}}
+        <div id="info" class="mt-10 md:mt-5  ml-5 md:ml-10 overflow-auto h-screen justify-center ">
+        <p >{{p1|linebreaks}}</p>
+    </div>
     </div>
 </div>
 

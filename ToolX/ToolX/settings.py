@@ -27,7 +27,7 @@ GOOGLE_MAPS_API_KEY = os.environ.get('GOOGLE_MAPS_API_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.0.8', '127.0.0.1','172.28.116.197']
+ALLOWED_HOSTS = ['192.168.0.8','127.0.0.1','172.17.26.141']
 
 
 # Application definition

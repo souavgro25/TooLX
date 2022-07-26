@@ -1,0 +1,107 @@
+{% extends 'base.html'%}
+
+{% block maincontent %}
+<div class="flex flex-col md:flex-row">
+    <div class="md:ml-20 ml-5 mt-10 flex-1 ">
+        <p class="text-xl text-gray-900 mb-5">
+            wordpress scaner
+        </p>
+        <form id="form1" class="flex gap-x-5 ">
+             {% csrf_token %}
+            <input id="host" class="border-2 rounded-lg border-gray-400 px-2 md:px-3 w-56 md:w-80" placeholder="Domains/IP" type="text">
+            
+            <button onclick="showtypes(event);search()" class="secondary px-5 py-0.5 bg-green-500 rounded-lg flex items-center gap-x-1 md:gap-x-2 ">Search
+              
+            </button>
+        </form>
+        
+    </div>
+    <div id="info" class="mt-10 md:mt-5 flex-1 ml-5 md:ml-20 overflow-auto h-screen ">
+        <div id="loading" class="loading ">
+            <img src="https://icaengineeringacademy.com/wp-content/uploads/2019/01/ajax-loading-gif-transparent-background-2.gif" alt="">
+        </div>
+    </div>
+
+</div>
+
+{% block script %}
+<script>
+    document.getElementById("loading").classList.add("remove")
+function showtypes(e){
+    e.preventDefault()
+    form1.prevent
+    document.getElementById("loading").classList.remove("remove");
+   
+}
+function search(){
+   
+    var host = document.getElementById("host").value
+    loading()
+    
+    url = "{% url 'wpscan' 'ip'  %}"
+    urlnew=url.replace("ip",host)
+    let html="";
+    fetch(urlnew)
+        
+        .then((res)=> res.json())
+        .then((res)=>{
+            document.getElementById("loading").classList.add("remove")
+        if(res.p1.banner.scan_aborted!=undefined){
+            data = `<p class="mt-5  p-5 mb-5 text-2xl text-gray-900 sticky top-0 secondary"> Scan Aborted ! </p> 
+                 `
+           }
+            else{
+              
+                 console.log(res);
+            data = `<p class="mb-5 text-xl text-color sticky top-0 base"> Results : </p> <p class="mt-2 ">
+                target url :${res.p1.target_url}
+                <p>Theme :${res.p1.main_theme.slug}</p>
+                <p>location : ${res.p1.main_theme.location}
+                </p>
+                <p class="mt-2"> target Ip : ${res.p1.target_ip} </p> `
+            for ( const i in  res.p1.plugins){
+            if (res.p1.plugins[i].version){
+
+            html +=`<div class="secondary rounded-2xl w-xl p-5 m-2 "> <p class="m-2  text-center"> IP :${i}
+            </p>  
+                    <div>
+                        <p>version : ${res.p1.plugins[i].version.number}</p>
+                        <p>last_updated: ${res.p1.plugins[i].last_updated}</p>
+                        <p>latest_version : ${res.p1.plugins[i].latest_version }</p>
+                    <div><p>Location:</p>
+                        <p> ${res.p1.plugins[i].location}<p/>
+                            
+                    </div></div>
+                    </div>
+                </div>`  
+                }
+            else{
+                html += `<div class="secondary rounded-2xl w-xl p-5 m-2  "> <p  class="m-2  text-center"> IP :${i}
+            </p>  
+                    <div>
+                        <p>last_updated: ${res.p1.plugins[i].last_updated}</p>
+                        <p>latest_version : ${res.p1.plugins[i].latest_version }</p>
+                    <div><p>Location:</p>
+                        <p> ${res.p1.plugins[i].location}<p/>
+                            
+                    </div></div>
+                    </div>
+                </div>`  
+                    
+            } 
+            }
+            }
+            data = data + html
+            show(data,'info')
+        })     
+        
+}
+function show(data,id){
+    
+    document.getElementById(id).innerHTML=data;
+}
+
+</script>
+
+{% endblock %}
+{% endblock %}

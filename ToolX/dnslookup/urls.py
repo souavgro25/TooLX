@@ -20,4 +20,6 @@ urlpatterns = [
     path('aesencrypt', views.aesencrypt, name='aesencrypt'),
     path('aesdecrypt', views.aesdecrypt, name='aesdecrypt'),
     path('shodan', views.index_shodan, name='index_shodan'),
+    path('wordpress_scan', views.wordpress_scan, name='wordpress_scan'),
+    path('wpscan/<str:ip>', views.wpscan, name='wpscan'),
 ]

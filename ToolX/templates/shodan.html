@@ -2,7 +2,7 @@
 
 {% block maincontent %}
 <div class="flex flex-col md:flex-row">
-    <div class="md:ml-20 ml-5 mt-10 flex-1 ">
+    <div class="md:ml-10 ml-5 mt-10 flex-1 ">
         <p class="text-xl text-gray-900 mb-5">
             Shodan Search
         </p>
@@ -10,15 +10,15 @@
              {% csrf_token %}
             <input id="host" class="border-2 rounded-lg border-gray-400 px-2 md:px-3 w-56 md:w-80" placeholder="Domains/IP" type="text">
             
-            <button onclick="showtypes(event);search()" class=" px-5 py-0.5 bg-green-500 rounded-lg flex items-center gap-x-1 md:gap-x-2 ">Search
+            <button onclick="showtypes(event);search()" class="secondary px-5 py-0.5 border-2 border-black rounded-lg flex items-center gap-x-1 md:gap-x-2 ">Search
               
             </button>
         </form>
         
     </div>
-    <div id="info" class="mt-10 md:mt-5 flex-1 ml-5 md:ml-20 overflow-auto h-screen ">
-        <div id="loading" class="loading ">
-            <img src="https://i.pinimg.com/originals/a2/dc/96/a2dc9668f2cf170fe3efeb263128b0e7.gif" alt="">
+    <div id="info" class="mt-10 md:mt-5  ml-5 md:ml-10 overflow-auto h-screen justify-center ">
+        <div id="loading" class="loading">
+            <img src="https://icaengineeringacademy.com/wp-content/uploads/2019/01/ajax-loading-gif-transparent-background-2.gif" alt="">
         </div>
     </div>
 
@@ -47,11 +47,11 @@ function search(){
         .then((res)=>{
             document.getElementById("loading").classList.add("remove")
            console.log(res);
-            data = `<p class="mb-5 text-xl text-gray-900 sticky top-0 bg-color"> Results : </p> <p class="mt-2 "></p>
+            data = `<p class="mb-5 text-xl text-color sticky top-0 base"> Results : </p> <p class="mt-2 "></p>
                     <p class="mt-2"> </p> `
             res.data.matches.map(i => {
             
-            html += ` <div class="bg-gray-900 rounded-2xl w-xl p-5 m-2  "> <p  class="m-2  text-center"> IP :${i.ip_str}
+            html += ` <div class=" secondary rounded-2xl w-l p-5 m-2  "> <p  class="m-2  text-center"> IP :${i.ip_str}
                 
                 </p>  <div class ="flex justify-between  items-center"> <div> <p>isp: ${i.isp} </p> <p>org :${i.org}</p> <p>os: ${i.os}</p> <p>product: ${i.product}</p> <p>port :${i.port}</p>
                 </div>

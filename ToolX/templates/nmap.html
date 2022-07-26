@@ -1,7 +1,7 @@
 {% extends 'base.html'%}
 
 {% block maincontent %}
-<div style="background-color: #1c273a;" class="flex flex-col md:flex-row">
+<div  class=" flex flex-col md:flex-row">
     <div class="md:ml-20 ml-5 mt-10 flex-1">
         <p class="text-xl text-gray-900 mb-5">
             Nmap Port Scan
@@ -16,7 +16,7 @@
 
 
             <button onclick="showtypes(event)"
-                class="  px-5 py-0.5 bg-green-500 rounded-lg flex items-center gap-x-1 md:gap-x-2 ">Nmap
+                class="  px-5 py-0.5 secondary rounded-lg flex items-center gap-x-1 md:gap-x-2 ">Nmap
                 <i style="margin-top: -2px;" class="fas fa-caret-down"></i>
             </button>
         </form>
@@ -29,7 +29,7 @@
     </div>
     <div id="info" class="mt-10 md:mt-5 flex-1 ml-5 md:ml-20">
         <div id="loading" class="loading ">
-            <img src="https://i.pinimg.com/originals/a2/dc/96/a2dc9668f2cf170fe3efeb263128b0e7.gif" alt="">
+            <img src="https://thumbs.gfycat.com/DisgustingSpiffyIguana-size_restricted.gif" alt="">
         </div>
     </div>
 
@@ -45,8 +45,11 @@
         document.getElementById("types").classList.remove("hidden");
     }
     function lookup(type) {
+        loading();
         try {
             document.getElementById("loading").classList.remove("remove")
+            
+       
         }
         catch {
             console.log(1)
@@ -99,6 +102,7 @@
     function show(data, id) {
         document.getElementById(id).innerHTML = data;
     }
+  
 </script>
 
 {% endblock %}

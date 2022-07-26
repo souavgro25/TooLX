@@ -11,7 +11,7 @@ from Crypto.Util.Padding import unpad, pad #import pad unpad from library
 from django.conf import settings
 import shodan
 SHODAN_API_KEY = settings.GOOGLE_MAPS_API_KEY
-
+import json
 print(SHODAN_API_KEY)
 #######################################################################################################################
 def nslookup(request,host,type):
@@ -174,13 +174,13 @@ def hping3(request):
             try:
                 option= request.Post.get('option') 
             except:
-                option= 1      
+                option= 2      
             if (option==1):
-                p= subprocess.run(['hping3', '-S', '--c', '4', ip], capture_output=True, text= True)
+                p= subprocess.run(['hping3', '-S', '--c', '4',ip], capture_output=True, text= True)
             elif(option==2):
-                p= subprocess.run(['hping3', '-1','--c', '4', ip], capture_output=True, text= True)
+                p= subprocess.run(['hping3', '-1','--c', '4',ip], capture_output=True, text= True)
             elif(option==3):
-                p= subprocess.run(['hping3', '-2','--c', '4', ip], capture_output=True, text= True)
+                p= subprocess.run(['hping3', '-2','--c', '4',ip], capture_output=True, text= True)
 
             if p.stderr:
                 p1= p.stderr
@@ -237,7 +237,6 @@ def assetfinder (request):
         return redirect('assetfinder')
 
 def shodansearch(request,query):
-    print('hello')
     api = shodan.Shodan('kYSgjMiDOH2Nd4Qi3Z2DtJcP9fjVCIGU')
     results = api.search(query)
     try:
@@ -294,6 +293,25 @@ def MD5hash(request):
             return render(request, 'home.html',{'tool':tool})
     except:
         return redirect('whoislookup')
+
+def wpscan(request,ip):
+    tool="wordpress scaner"
+    # try:
+    p= subprocess.run(['wpscan', '--url',ip,'-t40','-fjson','--detection-mode','passive' ], capture_output=True, text=True)#subprocess run command from command line
+    #if there is any eror output to catch that
+    if p.stderr:
+        p1= p.stderr
+    #else it will catch the output
+    elif p.stdout:
+        p1= json.loads(p.stdout)
+    else:
+        p1='provide the valid input'
+    return JsonResponse( {'p1': p1,"tool":tool,"error":0})            
+    # except:
+    #     return JsonResponse({"tool":tool,"error":1})
     
 def index_shodan(request):
     return render(request,'shodan.html')
+
+def wordpress_scan(request):
+    return render(request,'wpscan.html')
